@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hello Word</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" />
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script> 
+
+    <!-- LayerSwitcher https://github.com/walkermatt/ol-layerswitcher -->
+    <link rel="stylesheet" href="https://unpkg.com/ol-layerswitcher@3.3.0/src/ol-layerswitcher.css" />
+    <script src="https://unpkg.com/ol-layerswitcher@3.3.0"></script> 
+</head>
+<body>
+    <div id="map"></div>        
+    <script> 
+        var view = new ol.View({
+            center: ol.proj.fromLonLat([-54.594932, -25.435756]),
+            zoom: 15
+        });
+        var osm = new ol.layer.Tile({
+            title: 'OSM',
+            type: 'base',
+            visible: true,
+            source: new ol.source.OSM()
+        });
+        var bingmaps = new ol.layer.Tile({
+            title: 'Bing Maps',
+            type: 'base',
+            visible: true,
+            source: new ol.source.BingMaps({
+                // Your Bing Maps Key from http://www.bingmapsportal.com/ here
+                key: 'As1HiMj1PvLPlqc_gtM7AqZfBL8ZL3VrjaS3zIb22Uvb9WKhuJObROC-qUpa81U5',
+                // 'Road','RoadOnDemand','Aerial','AerialWithLabels','collinsBart','ordnanceSurvey'
+                imagerySet: 'AerialWithLabels'
+            })
+        })
+        var googlemaps = new ol.layer.Tile({
+            title: 'Google Maps',
+            type: 'base',
+            visible: true,
+            source: new ol.source.XYZ({
+              url: 'https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}',
+              attributions: '<a href="http://maps.google.com">Google Maps</a>' 
+              /* 
+              Tile Map Service
+              Google Maps: https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}
+              Google Satellite: http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}
+              Google Satellite Hybrid: https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}
+              Google Terrain: https://mt1.google.com/vt/lyrs=t&x={x}&y={y}&z={z}
+              Google Roads: https://mt1.google.com/vt/lyrs=h&x={x}&y={y}&z={z}
+              */
+            })            
+        });
+
+        // criar um grupo de Base Layers
+        var baseLayers = new ol.layer.Group({
+            title: 'Camada Base',            
+            layers: [osm, bingmaps, googlemaps]
+        });
+
+        var map = new ol.Map({
+            target: 'map',
+            layers: [baseLayers],
+            view: view
+        });
+
+        var layerSwitcher = new ol.control.LayerSwitcher();
+        map.addControl(layerSwitcher);
+
+    </script>
+</body>
+</html>
