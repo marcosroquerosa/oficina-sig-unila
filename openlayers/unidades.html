@@ -17,7 +17,7 @@
     <script>
         
         var view = new ol.View({
-            center: ol.proj.fromLonLat([-54.594932, -25.435756]),
+            center: ol.proj.fromLonLat([-54.594932, -25.435756]),            
             zoom: 15
         });
         var osm = new ol.layer.Tile({
@@ -91,10 +91,48 @@
             layers: [osm, bingmaps, googlemaps]
         });
 
-        // criar um grupo de WMS Layers
-        var camadas = new ol.layer.Group({
+      var iconStyle = new ol.style.Style({
+        image: new ol.style.Icon(/** @type {module:ol/style/Icon~Options} */ ({          
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: 'point.png'
+        }))
+      });
+
+      // pontos
+      var unidadePTI = new ol.Feature({                  
+        geometry: new ol.geom.Point(ol.proj.transform([-54.594932, -25.435756], 'EPSG:4326','EPSG:3857')),        
+        name: 'Unidade PTI'       
+      });
+
+      unidadePTI.setStyle(iconStyle);
+      
+      var unidadeJU = new ol.Feature({                  
+        geometry: new ol.geom.Point(ol.proj.transform([-54.572638, -25.465221], 'EPSG:4326','EPSG:3857')),        
+        name: 'Unidade Jardim Universitário'       
+      });
+      
+      unidadeJU.setStyle(iconStyle);
+
+      var unidadeVilaA = new ol.Feature({                  
+        geometry: new ol.geom.Point(ol.proj.transform([-54.563329, -25.494629], 'EPSG:4326','EPSG:3857')),        
+        name: 'Unidade Administrativa'       
+      });
+
+      unidadeVilaA.setStyle(iconStyle);      
+
+      var unidadesLayer = new ol.layer.Vector({
+        title: 'Unidades UNILA',
+        source: new ol.source.Vector({
+          features: [unidadePTI, unidadeJU, unidadeVilaA]
+        })
+      });
+
+      // criar um grupo de WMS Layers
+      var camadas = new ol.layer.Group({
             title: 'Camadas',            
-            layers: [ufs, rodovias, municipios_pr]
+            layers: [ufs, rodovias, municipios_pr, unidadesLayer]
         });
 
         var map = new ol.Map({
